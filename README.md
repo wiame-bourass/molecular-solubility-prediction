@@ -1,72 +1,109 @@
 # Molecular Solubility Lab
 
-Application de **prédiction de solubilité aqueuse (logS)** à partir de structures moléculaires SMILES, développée avec **Python, RDKit, scikit-learn, XGBoost, KNIME et Streamlit**.
+### Prédiction de solubilité aqueuse par machine learning et exploration de données moléculaires
 
-## Démonstration
+**Python · RDKit · KNIME · scikit-learn · XGBoost · Streamlit · PubChem**
 
-L'application comprend quatre pages :
+Molecular Solubility Lab est une application interactive dédiée à la **prédiction de la solubilité aqueuse de composés chimiques à partir de leur structure moléculaire**. Le projet couvre toute la chaîne de traitement, de la préparation des données et de la représentation des molécules jusqu'à l'évaluation des modèles et à leur utilisation dans une interface web.
 
-- **Accueil** : présentation du projet et du jeu de données.
-- **Prédiction** : saisie SMILES, structure 2D RDKit, identification du nom via PubChem et prédiction de logS, mol/L et g/L.
-- **Performance des modèles** : résultats de validation, analyse des erreurs et comparaison des représentations.
-- **Exploration moléculaire** : distribution de logS, descripteurs RDKit et structures ESOL.
+L'objectif est de construire un pipeline reproductible de **chémo-informatique et de machine learning**, tout en étudiant l'impact des représentations moléculaires et des stratégies de validation sur la qualité des prédictions.
+
+## Fonctionnalités
+
+| Module | Fonctionnalités |
+| --- | --- |
+| **Prédiction** | Saisie d'un SMILES, validation et représentation 2D avec RDKit, identification automatique via PubChem, estimation de logS, mol/L et g/L. |
+| **Performance des modèles** | Comparaison des protocoles random et scaffold, métriques de régression, graphiques mesuré/prédit et analyse des résidus. |
+| **Exploration moléculaire** | Analyse du jeu de données ESOL, distributions, corrélations des descripteurs, visualisation et recherche de molécules. |
+| **Accueil** | Présentation du projet, indicateurs clés et accès aux différents modules. |
 
 ## Données et préparation
 
-Le projet utilise le jeu de données **ESOL** (solubilité aqueuse expérimentale).
-Après normalisation et dédoublonnage : **1 117 molécules uniques**, regroupées en **269 scaffolds**.
+Le projet repose sur **ESOL**, un jeu de données de solubilité aqueuse expérimentale. Les structures sont traitées sous forme de **SMILES**.
 
-La cible est `measured log solubility in mols per litre` (logS). La colonne de solubilité *prédite* fournie par le jeu de données ne doit pas être utilisée comme variable d'entrée, afin d'éviter une fuite de données.
+- **1 117 molécules uniques** après préparation et dédoublonnage.
+- **269 scaffolds moléculaires** identifiés.
+- **10 descripteurs physicochimiques RDKit** : masse moléculaire, lipophilie, surface polaire, donneurs et accepteurs de liaisons hydrogène, entre autres.
+- **Empreintes Morgan** de 2 048 bits pour représenter les caractéristiques structurales.
 
-Les variables incluent **10 descripteurs RDKit** et des **empreintes Morgan** (2 048 bits). Le projet compare les séparations **random** et **scaffold**.
+La cible est la solubilité mesurée, exprimée en **logS** (logarithme décimal de la solubilité molaire). Les transformations et les représentations sont comparées dans plusieurs expérimentations.
 
-## Résultats principaux — expérimentation 3
+## Démarche de modélisation
 
-| Protocole | Modèle | Représentation | RMSE CV | RMSE test | MAE test | R² test |
+**1. Établir des références.** Comparaison de modèles de régression simples et d'ensembles d'arbres sur les premiers descripteurs RDKit.
+
+**2. Étudier la représentation moléculaire.** Évaluation de descripteurs physicochimiques seuls, d'empreintes Morgan seules et de leur combinaison.
+
+**3. Optimiser les modèles.** Recherche d'hyperparamètres et comparaison de plusieurs algorithmes, dont Random Forest, Extra Trees, HistGradientBoosting et XGBoost.
+
+**4. Évaluer la généralisation.** Utilisation de deux protocoles complémentaires :
+
+- **Random split** : mesure la performance sur des molécules tenues à l'écart de l'entraînement.
+- **Scaffold split** : sépare les molécules selon leur squelette chimique pour étudier la généralisation à de nouvelles familles structurales.
+
+Les modèles sont sélectionnés sur leur **RMSE en validation croisée**, puis évalués sur leur jeu de test respectif.
+
+## Résultats
+
+### Modèles retenus — expérimentation 3
+
+| Protocole | Modèle | Représentation | RMSE CV ↓ | RMSE test ↓ | MAE test ↓ | R² test ↑ |
 | --- | --- | --- | ---: | ---: | ---: | ---: |
-| Scaffold | HistGradientBoosting | D10 + Morgan r2 / 2048 | 0,772 | 0,907 | 0,663 | 0,769 |
-| Random | XGBoost | D10 + Morgan r3 / 2048 | 0,629 | 0,581 | 0,428 | 0,919 |
+| **Scaffold** | **HistGradientBoosting** | 10 RDKit + Morgan r2 (2 048 bits) | 0,772 | **0,907** | **0,663** | **0,769** |
+| **Random** | **XGBoost** | 10 RDKit + Morgan r3 (2 048 bits) | 0,629 | **0,581** | **0,428** | **0,919** |
 
-Les erreurs sont exprimées en **unités logS**. Les jeux de test des deux protocoles sont différents : leurs scores ne permettent **pas** de classer directement les algorithmes. La sélection des modèles a été faite sur la RMSE en validation croisée. Les jeux de test ont été consultés au cours du travail exploratoire : les scores ne constituent pas une validation externe indépendante.
+Les métriques sont calculées en **logS**. Les deux protocoles utilisent des jeux de test différents : ils renseignent sur des conditions de généralisation distinctes et ne constituent pas une comparaison directe des algorithmes à jeu de test identique.
 
-L'**expérimentation 2** compare les représentations moléculaires ; ses résultats sont conservés séparément.
+Le modèle **HistGradientBoosting évalué par scaffold split** est mis en avant dans l'application ; le modèle **XGBoost évalué par random split** est disponible pour comparaison.
 
-## Installation locale
+## Architecture du dépôt
 
-Python et les bibliothèques natives RDKit doivent être compatibles avec votre système.
+```text
+app/
+  Home.py                         # Page d'accueil
+  pages/
+    1_Prediction.py               # Inférence et identification moléculaire
+    2_Model_Performance.py        # Métriques et analyse des erreurs
+    3_Molecular_Explorer.py       # Exploration des données ESOL
+  utils/                           # Fonctions moléculaires et chargement des modèles
 
-```bash
+data/
+  raw/                             # Données ESOL sources
+  processed/                       # Données nettoyées et enrichies
+
+models/                             # Scripts d'entraînement et comparaison
+results/
+  baseline/                        # Premières évaluations
+  representations/                 # Étude des représentations moléculaires
+  optimisation/                    # Modèles optimisés et prédictions test
+
+requirements.txt
+README.md
+```
+
+## Lancer l'application
+
+Depuis la racine du projet, sous **Windows PowerShell** :
+
+```powershell
 python -m venv .venv
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 python -m streamlit run app/Home.py
 ```
 
-**Important :** les fichiers `.joblib` ont été sérialisés avec les versions de bibliothèques de l'environnement d'entraînement. En cas d'incompatibilité de chargement, reproduire les versions utilisées lors de l'entraînement (notamment scikit-learn et XGBoost).
+L'application est ensuite accessible à l'adresse locale indiquée par Streamlit (généralement `localhost:8501`).
 
-## Structure
+> **Environnement :** les modèles sérialisés avec `joblib` peuvent nécessiter les mêmes versions de scikit-learn et de XGBoost que lors de leur entraînement. La récupération des noms via PubChem nécessite une connexion Internet ; elle est distincte du calcul des prédictions.
 
-```text
-app/                  # Interface Streamlit et fonctions d'inférence
-data/raw/             # Données ESOL d'origine
-data/processed/       # Données nettoyées et descripteurs
-models/               # Scripts d'entraînement et modèles de l'exp. 2
-results/optimisation/ # Modèles et prédictions de l'exp. 3
-results/representations/ # Comparaison des représentations
-results/baseline/     # Résultats de la baseline
-knime/                # Emplacement réservé au workflow KNIME
-```
+## Compétences mobilisées
 
-## Reproductibilité et limites
+**Chémo-informatique :** SMILES, validation de structures, descripteurs RDKit, empreintes Morgan, scaffolds moléculaires, KNIME.
 
-- La recherche du nom d'une molécule via **PubChem** nécessite Internet et transmet le SMILES au service externe ; l'inférence peut fonctionner sans cette identification.
-- La conversion utilisée est `S (mol/L) = 10**logS`, puis `S (g/L) = S (mol/L) × masse molaire (g/mol)`.
-- Les catégories de solubilité sont indicatives, pas réglementaires.
-- Les prédictions dépendent des conditions expérimentales (température, pH, état d'ionisation).
-- Les scripts d'expérimentation ne constituent pas un pipeline automatisé de production.
-- Les modèles `.joblib` doivent provenir d'une source de confiance ; ne jamais charger des fichiers arbitraires.
+**Machine learning :** préparation de données, régression, validation croisée, recherche d'hyperparamètres, analyse des erreurs et évaluation de la généralisation.
 
-## Technologies
+**Développement :** Python, pandas, NumPy, scikit-learn, XGBoost, Streamlit, Plotly, intégration de PubChem et organisation d'un projet reproductible.
 
-Python · pandas · NumPy · RDKit · scikit-learn · XGBoost · Plotly · Streamlit · KNIME
+---
+
+*Projet de portfolio en chémo-informatique et intelligence artificielle appliquée à la prédiction de propriétés moléculaires.*
