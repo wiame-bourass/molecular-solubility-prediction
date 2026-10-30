@@ -2,8 +2,6 @@
 
 Application de **prédiction de solubilité aqueuse (logS)** à partir de structures moléculaires SMILES, développée avec **Python, RDKit, scikit-learn, XGBoost, KNIME et Streamlit**.
 
-> Projet exploratoire de machine learning, sans validation pharmaceutique. Les résultats ne remplacent pas une mesure expérimentale.
-
 ## Démonstration
 
 L'application comprend quatre pages :
@@ -12,8 +10,6 @@ L'application comprend quatre pages :
 - **Prédiction** : saisie SMILES, structure 2D RDKit, identification du nom via PubChem et prédiction de logS, mol/L et g/L.
 - **Performance des modèles** : résultats de validation, analyse des erreurs et comparaison des représentations.
 - **Exploration moléculaire** : distribution de logS, descripteurs RDKit et structures ESOL.
-
-> Ajouter ici une capture d'écran et, après déploiement, le lien vers l'application.
 
 ## Données et préparation
 
