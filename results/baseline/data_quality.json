@@ -1,0 +1,18 @@
+{
+  "initial_rows": 1128,
+  "missing_by_column": {
+    "AMW": 0,
+    "SlogP": 0,
+    "TPSA": 0,
+    "NumHBD": 0,
+    "NumHBA": 0,
+    "measured log solubility in mols per litre": 0,
+    "smiles": 0
+  },
+  "invalid_smiles": 0,
+  "non_finite_rows": 0,
+  "duplicate_canonical_smiles": 11,
+  "molecules_with_conflicting_measurements": 6,
+  "clean_unique_molecules": 1117,
+  "unique_scaffolds": 269
+}

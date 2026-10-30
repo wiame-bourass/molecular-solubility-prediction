@@ -1,0 +1,45 @@
+{
+  "winners": {
+    "random": {
+      "representation": "D10_Morgan_r3_2048",
+      "algorithm": "XGBoost",
+      "cv_RMSE": 0.6294918576344303,
+      "test": {
+        "MAE": 0.42843589774179935,
+        "RMSE": 0.5814164011115802,
+        "R2": 0.9187938246600895
+      },
+      "best_params": {
+        "subsample": 0.9,
+        "reg_lambda": 10,
+        "n_estimators": 500,
+        "max_depth": 4,
+        "learning_rate": 0.07,
+        "colsample_bytree": 0.7
+      }
+    },
+    "scaffold": {
+      "representation": "D10_Morgan_r2_2048",
+      "algorithm": "HistGradientBoosting",
+      "cv_RMSE": 0.7718714834183636,
+      "test": {
+        "MAE": 0.6630791726850128,
+        "RMSE": 0.9066704850814854,
+        "R2": 0.7694007435538035
+      },
+      "best_params": {
+        "min_samples_leaf": 10,
+        "max_leaf_nodes": 15,
+        "max_iter": 350,
+        "learning_rate": 0.06,
+        "l2_regularization": 0.0
+      }
+    }
+  },
+  "n_molecules": 1117,
+  "n_scaffolds": 269,
+  "n_iter": 12,
+  "cv_folds": 3,
+  "selection": "minimum training CV RMSE",
+  "caution": "Prior test sets have been examined; results are exploratory, not external validation."
+}

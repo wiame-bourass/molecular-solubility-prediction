@@ -1,0 +1,11 @@
+{
+  "source": "data\\processed\\esol_processed_v2.csv",
+  "raw_rows": 1128,
+  "unique_molecules": 1117,
+  "duplicate_rows": 11,
+  "unique_scaffolds": 269,
+  "model": "RandomForestRegressor(n_estimators=200,min_samples_leaf=1,random_state=42)",
+  "selection": "minimum CV RMSE on training only",
+  "test": "only selected representation evaluated",
+  "note": "previously viewed test results are exploratory; new split is not an untouched external holdout"
+}
