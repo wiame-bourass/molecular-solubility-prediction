@@ -4,9 +4,17 @@
 
 **Python · RDKit · KNIME · scikit-learn · XGBoost · Streamlit · PubChem**
 
+[**🚀 Tester l’application en ligne**](https://molecular-solubility-prediction-kcvaadncyhnurxdnayjgpt.streamlit.app/) · [**💻 Explorer le code source**](https://github.com/wiame-bourass/molecular-solubility-prediction)
+
 Molecular Solubility Lab est une application interactive dédiée à la **prédiction de la solubilité aqueuse de composés chimiques à partir de leur structure moléculaire**. Le projet couvre toute la chaîne de traitement, de la préparation des données et de la représentation des molécules jusqu'à l'évaluation des modèles et à leur utilisation dans une interface web.
 
 L'objectif est de construire un pipeline reproductible de **chémo-informatique et de machine learning**, tout en étudiant l'impact des représentations moléculaires et des stratégies de validation sur la qualité des prédictions.
+
+## Démonstration interactive
+
+L’application est accessible directement dans le navigateur, sans installation : **[ouvrir Molecular Solubility Lab](https://molecular-solubility-prediction-kcvaadncyhnurxdnayjgpt.streamlit.app/)**.
+
+Pour essayer la prédiction, ouvrir l’onglet **Prediction**, saisir un SMILES (par exemple `NC(=O)c1cccnc1` pour la niacinamide), sélectionner un modèle et lancer l’analyse.
 
 ## Fonctionnalités
 
@@ -78,6 +86,7 @@ results/
   optimisation/                    # Modèles optimisés et prédictions test
 
 requirements.txt
+packages.txt                       # Dépendances système Linux pour RDKit
 README.md
 ```
 
@@ -94,7 +103,7 @@ python -m streamlit run app/Home.py
 
 L'application est ensuite accessible à l'adresse locale indiquée par Streamlit (généralement `localhost:8501`).
 
-> **Environnement :** les modèles sérialisés avec `joblib` peuvent nécessiter les mêmes versions de scikit-learn et de XGBoost que lors de leur entraînement. La récupération des noms via PubChem nécessite une connexion Internet ; elle est distincte du calcul des prédictions.
+La démonstration publique est déployée sur **Streamlit Community Cloud** avec **Python 3.12**. Les dépendances Python sont déclarées dans `requirements.txt` et les bibliothèques système nécessaires à RDKit dans `packages.txt`. La récupération des noms via PubChem nécessite une connexion Internet ; elle est indépendante du calcul de la prédiction.
 
 ## Compétences mobilisées
 
@@ -106,4 +115,4 @@ L'application est ensuite accessible à l'adresse locale indiquée par Streamlit
 
 ---
 
-*Projet de portfolio en chémo-informatique et intelligence artificielle appliquée à la prédiction de propriétés moléculaires.*
+**[Accéder à la démonstration](https://molecular-solubility-prediction-kcvaadncyhnurxdnayjgpt.streamlit.app/)** · **[Consulter le dépôt GitHub](https://github.com/wiame-bourass/molecular-solubility-prediction)**
